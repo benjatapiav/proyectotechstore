@@ -1,43 +1,27 @@
-package cl.duoc.proyectotechstore.model;
+package cl.duoc.proyectotechstore.dto;
 
-import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 
-@Entity
-@Table(name="productos")
-public class ProductoEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class ProductoDTO {
 
-    @Column(nullable = false, length = 100)
+    @NotBlank(message = "El nombre del producto es obligatorio")
     private String nombreProducto;
 
-    @Column(nullable = false, length = 100)
+    @NotBlank(message = "El tipo de producto es obligatorio")
     private String tipoProducto;
-    
-    @Column(nullable = false)
+
+    @NotNull(message = "El precio es obligatorio")
+    @Positive(message = "El precio debe ser mayor a 0")
     private Double precioProducto;
-    
-    @Column(nullable = false)
-    private int stockProducto;
-    
-    @Column(length = 255)
+
+    @NotNull(message = "El stock es obligatorio")
+    @Min(value = 0 ,message = "El stock no puede ser negativo")
+    private Integer stockProducto;
+
+    @Size(max = 255, message = "La descripción no puede superar 255 caracteres")
     private String descripcionProducto;
 
-    @Column(nullable = false)
-    private Boolean activo=true;
-
-    public ProductoEntity(){
-
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+    private Boolean activo = true;
 
     public String getNombreProducto() {
         return nombreProducto;
@@ -63,12 +47,12 @@ public class ProductoEntity {
         this.precioProducto = precioProducto;
     }
 
-    public int getStockProducto() {
+    public Integer getSotckProducto() {
         return stockProducto;
     }
 
-    public void setStockProducto(int stockProducto) {
-        this.stockProducto = stockProducto;
+    public void setSotckProducto(Integer sotckProducto) {
+        this.stockProducto = sotckProducto;
     }
 
     public String getDescripcionProducto() {
@@ -88,5 +72,4 @@ public class ProductoEntity {
     }
 
     
-
 }
