@@ -19,7 +19,7 @@ public class ProductoEntity {
     private Double precioProducto;
     
     @Column(nullable = false)
-    private int stockProducto;
+    private Integer stockProducto;
     
     @Column(length = 255)
     private String descripcionProducto;
@@ -63,11 +63,11 @@ public class ProductoEntity {
         this.precioProducto = precioProducto;
     }
 
-    public int getStockProducto() {
+    public Integer getStockProducto() {
         return stockProducto;
     }
 
-    public void setStockProducto(int stockProducto) {
+    public void setStockProducto(Integer stockProducto) {
         this.stockProducto = stockProducto;
     }
 

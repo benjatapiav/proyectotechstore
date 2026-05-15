@@ -47,12 +47,12 @@ public class ProductoDTO {
         this.precioProducto = precioProducto;
     }
 
-    public Integer getSotckProducto() {
+    public Integer getStockProducto() {
         return stockProducto;
     }
 
-    public void setSotckProducto(Integer sotckProducto) {
-        this.stockProducto = sotckProducto;
+    public void setStockProducto(Integer stockProducto) {
+        this.stockProducto = stockProducto;
     }
 
     public String getDescripcionProducto() {
