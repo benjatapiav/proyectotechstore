@@ -20,7 +20,10 @@ jobs:
           java-version: '21'
 
       - name: Build with Maven
-        run: mvn clean test
+        working-directory: ./proyectotechstore
+        run: |
+          chmod +x mvnw
+          ./mvnw clean test
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -34,6 +37,7 @@ jobs:
         uses: aws-actions/amazon-ecr-login@v2
 
       - name: Build Docker image
+        working-directory: ./proyectotechstore
         run: docker build -t techstore-api .
 
       - name: Tag image
