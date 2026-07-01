@@ -5,6 +5,9 @@ import cl.duoc.proyectotechstore.dto.ProductoPatchDTO;
 import cl.duoc.proyectotechstore.model.ProductoEntity;
 import cl.duoc.proyectotechstore.repository.ProductoRepository;
 import cl.duoc.proyectotechstore.service.ProductoService;
+import cl.duoc.proyectotechstore.dto.AuditEvent;
+import cl.duoc.proyectotechstore.service.SqsService;
+import jakarta.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +19,9 @@ public class ProductoServiceImpl implements ProductoService {
 
     @Autowired
     private ProductoRepository productoRepository;
+    
+    @Autowired
+    private SqsService sqsService;
 
     @Override
     public List<ProductoEntity> listarProductos() {
@@ -41,7 +47,16 @@ public class ProductoServiceImpl implements ProductoService {
         producto.setDescripcionProducto(productoDTO.getDescripcionProducto());
         producto.setActivo(true);
 
-        return productoRepository.save(producto);
+        ProductoEntity guardado = productoRepository.save(producto);
+
+        AuditEvent evento = new AuditEvent();
+        evento.setAccion("CREAR");
+        evento.setProductoId(guardado.getId());
+        evento.setNombreProducto(guardado.getNombreProducto());
+
+        sqsService.enviarMensaje(evento);
+
+        return guardado;
     }
 
     @Override
@@ -57,7 +72,16 @@ public class ProductoServiceImpl implements ProductoService {
         producto.setDescripcionProducto(productoDTO.getDescripcionProducto());
         producto.setActivo(productoDTO.getActivo());
 
-        return productoRepository.save(producto);
+        ProductoEntity actualizado = productoRepository.save(producto);
+
+        AuditEvent evento = new AuditEvent();
+        evento.setAccion("ACTUALIZAR");
+        evento.setProductoId(actualizado.getId());
+        evento.setNombreProducto(actualizado.getNombreProducto());
+
+        sqsService.enviarMensaje(evento);
+
+        return actualizado;
     }
 
     @Override
@@ -102,5 +126,17 @@ public class ProductoServiceImpl implements ProductoService {
         producto.setActivo(false);
 
         productoRepository.save(producto);
+
+        AuditEvent evento = new AuditEvent();
+        evento.setAccion("ELIMINAR");
+        evento.setProductoId(producto.getId());
+        evento.setNombreProducto(producto.getNombreProducto());
+
+        sqsService.enviarMensaje(evento);
     }
+
+    @PostConstruct
+    public void test() {
+        System.out.println("SqsService = " + sqsService);
+    }   
 }
