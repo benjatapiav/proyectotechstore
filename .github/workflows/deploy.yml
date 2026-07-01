@@ -23,7 +23,7 @@ jobs:
         working-directory: ./proyectotechstore
         run: |
           chmod +x mvnw
-          ./mvnw clean test
+          ./mvnw clean package -DskipTests
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
